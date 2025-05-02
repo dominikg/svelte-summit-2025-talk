@@ -1,0 +1,112 @@
+:root {
+  --white: hsl(0deg 0% 100%);
+  --light: hsl(108deg 22% 95%);
+  --grey: hsl(0deg 0% 78%);
+  --dark: hsl(0deg 0% 10%);
+  --black: hsl(0deg 0% 5%);
+
+  --svelte-orange: hsl(12deg 95% 62%);
+  --svelte-orange-semi: hsl(12deg 95% 62% / 60%);
+  --yellow-orange: hsl(32deg 95% 62%);
+  --dark-orange: hsl(12deg 95% 10%);
+  --pink: hsl(342deg 95% 50%);
+  --vite-purple: hsl(237deg 100% 70%);
+  --vite-light-purple: hsl(262deg 89% 83%);
+  --vitest-green-dark: hsl(79deg 80% 25%);
+  --vitest-green: hsl(81deg 56% 62%);
+  --primary: var(--vitest-green);
+  --secondary: var(--vitest-green-dark);
+  --tertiary: var(--svelte-orange);
+  --background: var(--dark);
+  --foreground: var(--light);
+
+  --base-font-size: 40px;
+  --heading-font-size: 80px;
+}
+
+.slide {
+  --padding: 3em;
+
+  padding: var(--padding);
+  font-size: var(--base-font-size);
+  color: var(--foreground);
+
+  ::selection {
+    color: var(--dark);
+    background-color: var(--primary);
+  }
+
+  &.dark {
+    color: var(--background);
+  }
+
+  h1 {
+    margin-top: 0;
+    margin-bottom: 1.5em;
+    font-size: calc(var(--heading-font-size));
+    font-variation-settings: 'wdth' 80;
+    font-weight: 800;
+    color: var(--light);
+    filter: drop-shadow(0.1em 0.1em 0 var(--primary));
+  }
+
+  h2 {
+    margin-top: -1.2em;
+    margin-bottom: 2em;
+    font-size: calc(var(--heading-font-size) / 1.8);
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--secondary);
+  }
+
+  a,
+  a:visited {
+    color: var(--primary);
+  }
+
+  h1,
+  h2 {
+    position: relative;
+    z-index: 1;
+    display: inline;
+
+    &::before {
+      position: absolute;
+      top: -15px;
+      left: -35px;
+      z-index: -1;
+      display: block;
+      width: calc(100% + 70px);
+      height: calc(100% + 30px);
+      content: '';
+      background: var(--black);
+    }
+  }
+
+  p {
+    position: relative;
+    z-index: 1;
+    display: inline;
+
+    &::before {
+      position: absolute;
+      top: -2.5px;
+      left: -10px;
+      z-index: -1;
+      display: block;
+      width: calc(100% + 20px);
+      height: calc(100% + 5px);
+      content: '';
+      background: rgb(0 0 0 / 10%);
+    }
+  }
+
+  pre.shiki {
+    width: max-content;
+    margin: 0 auto;
+  }
+
+  svg text {
+    font-size: 2rem;
+  }
+}
