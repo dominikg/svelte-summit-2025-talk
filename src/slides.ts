@@ -2,6 +2,7 @@ import type { Slide } from '$lib/slide'
 
 import VitestSvelte from '$assets/images/vitest-svelte.svg'
 import PlaywrightSvelte from '$assets/images/playwright-svelte.svg'
+import VitestBrowserMode from '$assets/images/vitest-browser-mode.png'
 export default [
   { template: 'Start' },
   {
@@ -88,7 +89,7 @@ export default [
 `,
       language: 'ts',
     },
-    notes: ['runs in node environment','excludes .svelte. files!'],
+    notes: ['runs in node environment', 'excludes .svelte. files!'],
   },
   {
     h1: 'vitest config',
@@ -98,7 +99,7 @@ export default [
 // in vite.config.ts test.workspace
       {
         extends: './vite.config.ts',
-        plugins: [svelteTesting()],
+        plugins: [svelteTesting()], // testing-library svelte helper
         test: {
           name: 'client',
           environment: 'jsdom',
@@ -111,7 +112,28 @@ export default [
 `,
       language: 'ts',
     },
-    notes: ['runs in jsdom environment','plugin','adds se'],
+    notes: ['runs in jsdom environment', 'plugin', 'adds setup file for mocking'],
+  },
+  {
+    h1: 'mock matchMedia',
+    h2: 'used by svelte itself',
+    code: {
+      source: `// vitest-setup-client.ts      
+import '@testing-library/jest-dom/vitest';
+import { vi } from 'vitest';
+
+// required for svelte5 + jsdom as jsdom does not support matchMedia
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  enumerable: true,
+  value: vi.fn().mockImplementation((query) => ({
+    //...
+  }))
+});
+
+// add more mocks here if you need them`,
+      language: 'ts',
+    },
   },
   {
     h1: 'run unit tests',
@@ -132,7 +154,7 @@ export default [
     notes: ['project prefix', 'watch mode demo'],
   },
   {
-    h1: 'testing runes in .svelte.js',
+    h1: 'testing runes in svelte modules',
     code: {
       source: ` // doubler.svelte.ts
 export class Doubler {
@@ -150,7 +172,7 @@ export class Doubler {
     notes: ['$derived in a class'],
   },
   {
-    h1: 'with runes in tests',
+    h1: 'with runes in test modules!',
     h2: 'client project',
     code: {
       source: ` // in doubler.svelte.test.ts
@@ -165,7 +187,7 @@ describe('doubler.svelte.ts', () => {
 });`,
       language: 'ts',
     },
-    notes: ['infix notation','rune use in test code', 'reactivity!'],
+    notes: ['infix notation', 'rune use in test code', 'reactivity!'],
   },
 
   {
@@ -232,9 +254,89 @@ describe('Greeter.svelte SSR', () => {
 });`,
       language: 'ts',
     },
-    notes: ['useful in some cases','also for head output','faster feedback than e2e test'],
+    notes: ['useful in some cases', 'also for head output', 'faster feedback than e2e test'],
+  },
+  {
+    h1: 'Testing in a real browser',
+    h2: "when a fake dom doesn't cut it",
+    text: ['missing apis', 'no visual feedback', 'subtle behavior differences'],
   },
 
+  {
+    h1: 'with vitest browser mode',
+    code: {
+      source: `
+pnpm i -D @vitest/browser vitest-browser-svelte playwright
+
+Packages: +7
++++++++
+Progress: resolved 328, reused 284, downloaded 0, added 0, done
+
+devDependencies:
++ @vitest/browser 3.1.2
++ playwright 1.52.0
++ vitest-browser-svelte 0.1.0     
+`,
+      language: 'bash',
+    },
+  },
+  {
+    h1: 'vitest config',
+    h2: 'client project',
+    code: {
+      source: `// in vite.config.ts test.workspace
+        test:{
+          name: 'client',
+          environment: 'browser',
+          browser:{
+            enabled: true,
+            provider: 'playwright',
+            instances:[{
+              browser: 'chromium'
+            }]
+          },
+          //...
+        }
+`,
+      language: 'ts',
+    },
+    notes: ['browser environment', 'webdriverio provider', 'multiple browsers'],
+  },
+  {
+    h1: 'more matchers, less mocking',
+    code: {
+      source: `// vitest-setup-client.ts      
+/// <reference types="@vitest/browser/matchers" />
+/// <reference types="@vitest/browser/providers/playwright" />`,
+      language: 'ts',
+    },
+  },
+  {
+    h1: 'use vitest-browser-svelte',
+    h2: 'client project',
+    code: {
+      source: `// Greeter.svelte.test.ts
+import { describe, it, expect } from 'vitest';
+- import { render } from '@testing-library/svelte';
++ import { render } from 'vitest-browser-svelte';
+import Greeter from './Greeter.svelte';
+describe('Greeter.svelte', () => {
+  //...
+});`,
+      language: 'diff',
+    },
+    notes: [
+      'fork with a small changes',
+      'clear before instead of after',
+      'hopefully collaborate for common base',
+    ],
+  },
+
+  {
+    h1: 'demo',
+    image: VitestBrowserMode,
+  },
+  ///--- playwright
   {
     image: PlaywrightSvelte,
     notes: ['started in 2021', 'exceptional growth', 'top of the surveys'],
@@ -272,6 +374,15 @@ export default defineConfig({
     },
     notes: ['builtin start server script'],
   },
+
+  // multiple webServer
+  // adapter-node use
+  // docker image
+  // test url
+  // extensible with app specific needs (eg auth, wait for hydration)
+  // test sverdle ?
+  // trace tool on first fail
+
   {
     template: 'Centred',
     h1: 'Resources',
@@ -292,11 +403,12 @@ export default defineConfig({
     template: 'Centred',
     h1: 'get in touch',
     text: [
+      'https://goepel.it',
       'https://elk.zone/m.webtoo.ls/@dominikg',
       'https://github.com/dominikg',
       'https://svelte.dev/chat/',
-      'https://goepel.it',
     ],
+    notes: ['for hire'],
   },
   { template: 'End' },
 ] satisfies Slide[]

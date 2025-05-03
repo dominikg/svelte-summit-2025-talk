@@ -60,10 +60,11 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-
+    /*
     &.frame {
       filter: drop-shadow(0.5em 0.5em 0 var(--primary));
     }
+    */
   }
 
   canvas {
