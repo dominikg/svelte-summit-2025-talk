@@ -52,8 +52,7 @@ export default [
     h1: 'vitest config',
     h2: 'workspace',
     code: {
-      source: `
-// in vite.config.ts
+      source: `// in vite.config.ts
   test: {
     workspace: [ // a workspace can contain multiple projects
     {
@@ -65,8 +64,7 @@ export default [
       test: { name: 'client',...}
     },    
     ]
-  }    
-`,
+  }`,
       language: 'ts',
     },
     notes: ['workspace feature'],
@@ -75,8 +73,7 @@ export default [
     h1: 'vitest config',
     h2: 'server project',
     code: {
-      source: `
-// in vite.config.ts test.workspace
+      source: `// in vite.config.ts test.workspace
       {
         extends: './vite.config.ts',
         test: {
@@ -85,8 +82,7 @@ export default [
           include: ['src/**/*.{test,spec}.{js,ts}'],
           exclude: ['src/**/*.svelte.{test,spec}.{js,ts}']
         }
-      }, 
-`,
+      }`,
       language: 'ts',
     },
     notes: ['runs in node environment', 'excludes .svelte. files!'],
@@ -95,8 +91,7 @@ export default [
     h1: 'vitest config',
     h2: 'client project',
     code: {
-      source: `
-// in vite.config.ts test.workspace
+      source: `// in vite.config.ts test.workspace
       {
         extends: './vite.config.ts',
         plugins: [svelteTesting()], // testing-library svelte helper
@@ -108,8 +103,7 @@ export default [
           exclude: ['src/lib/server/**'],
           setupFiles: ['./vitest-setup-client.ts']
         }
-      },
-`,
+      }`,
       language: 'ts',
     },
     notes: ['runs in jsdom environment', 'plugin', 'adds setup file for mocking'],
@@ -122,16 +116,14 @@ export default [
 import '@testing-library/jest-dom/vitest';
 import { vi } from 'vitest';
 
-// required for svelte5 + jsdom as jsdom does not support matchMedia
+// required for svelte5 in jsdom as it does not support matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   enumerable: true,
   value: vi.fn().mockImplementation((query) => ({
     //...
   }))
-});
-
-// add more mocks here if you need them`,
+});`,
       language: 'ts',
     },
   },
@@ -191,7 +183,7 @@ describe('doubler.svelte.ts', () => {
   },
 
   {
-    h1: 'Component',
+    h1: 'Test components',
     code: {
       source: ` // Greeter.svelte
 <script lang="ts">
@@ -203,7 +195,7 @@ Hello, {name}!`,
     },
   },
   {
-    h1: 'Component test',
+    h1: 'with @testing-library/svelte',
     h2: 'client project',
     code: {
       source: `// Greeter.svelte.test.ts
@@ -221,7 +213,7 @@ describe('Greeter.svelte', () => {
     notes: ['render uses svelte mount'],
   },
   {
-    h1: 'can also use runes',
+    h1: 'runes work in component tests too',
     h2: 'client project',
     code: {
       source: `// in Greeter.svelte.test.ts describe
@@ -239,7 +231,7 @@ describe('Greeter.svelte', () => {
     notes: ['render uses svelte mount'],
   },
   {
-    h1: 'or server output',
+    h1: 'and you can also test SSR output',
     h2: 'server project',
     code: {
       source: `// Greeter.ssr.test.ts
@@ -257,6 +249,7 @@ describe('Greeter.svelte SSR', () => {
     notes: ['useful in some cases', 'also for head output', 'faster feedback than e2e test'],
   },
   {
+    template: 'Centred',
     h1: 'Testing in a real browser',
     h2: "when a fake dom doesn't cut it",
     text: ['missing apis', 'no visual feedback', 'subtle behavior differences'],
@@ -333,7 +326,7 @@ describe('Greeter.svelte', () => {
   },
 
   {
-    h1: 'demo',
+    h1: 'demo time',
     image: VitestBrowserMode,
   },
   ///--- playwright
