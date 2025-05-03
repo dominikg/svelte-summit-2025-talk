@@ -368,13 +368,117 @@ export default defineConfig({
     notes: ['builtin start server script'],
   },
 
-  // multiple webServer
-  // adapter-node use
-  // docker image
-  // test url
-  // extensible with app specific needs (eg auth, wait for hydration)
-  // test sverdle ?
-  // trace tool on first fail
+  {
+    h1: 'run e2e tests',
+    code: {
+      source: ` ❯ pnpm test:e2e
+
+> svelte-summit-testing@0.0.1 test:e2e /home/dominikg/develop/svelte-summit-2025/test-app
+> playwright test
+Running 4 tests using 3 workers
+
+  ✓  1 e2e/demo.test.ts:3:1 › home page has expected h1 (107ms)
+  ✓  2 e2e/about.test.ts:4:2 › /about › does not use clientside javascript (342ms)
+  ✓  3 e2e/api.test.ts:4:2 › /api/data.json › returns message (341ms)
+  ✓  4 e2e/about.test.ts:10:2 › /about › has a heading containing About (83ms)
+
+  4 passed (4.0s)`,
+      language: 'bash',
+    },
+  },
+
+  {
+    h1: 'api test',
+    code: {
+      source: `import {test,expect} from '@playwright/test';
+
+test.describe('/api/data.json',()=>{
+  test('returns message', async ({ request }) => {
+    const response = await request.get('/api/data.json');
+    const data = await response.json();
+    expect(data.message).toBe('Hello Svelte Summit')
+  })
+})`,
+      language: 'ts',
+    },
+  },
+
+  {
+    h1: 'about test',
+    code: {
+      source: `test.describe('/about',()=>{
+  test('does not use clientside javascript', async ({ request }) => {
+    const response = await request.get('/about',{headers:{accept:'text/html'}});
+    const html = (await response.body()).toString();
+    expect(html).not.toContain('<script')
+    expect(html).toContain('<body')
+  })
+  test('has a heading containing About',async ({page})=>{
+    await page.goto('/about');
+    await expect(page.getByRole('heading')).toContainText('About');
+  })
+})`,
+      language: 'ts',
+    },
+  },
+
+  {
+    h1: 'multiple local servers',
+    code: {
+      source: `// playwright.config.ts
+  webServer: [{
+    commmand: 'npm run start:backend',
+    port: 3000
+  } , {
+    command: 'npm run build && node build/index.js',
+    env: {PORT: '4173'}
+    port: 4173,
+  }],`,
+      language: 'ts',
+    },
+  },
+
+  {
+    h1: 'remote testing',
+    code: {
+      source: ` // playwright.config.ts
+const E2E_BASE_URL = process.env.TEST_BASE_URL;
+const localConfig: PlaywrightTestConfig = {
+  webServer: [{
+      command: 'npm run build && node build/index.js',
+      env: { PORT: '4173' }, port: 4173,
+    }],
+}
+const remoteConfig: PlaywrightTestConfig = {
+  use: { baseURL: E2E_BASE_URL }
+}
+export default defineConfig({
+  testDir: 'e2e',
+  ...(E2E_BASE_URL ? remoteConfig : localConfig)
+});`,
+      language: 'ts',
+    },
+  },
+
+  {
+    h1: 'execute in docker',
+    code: {
+      source: `#Dockerfile
+ARG E2E_BASE_URL      
+FROM mcr.microsoft.com/playwright:v1.52.0-noble
+ENV CI=1\\
+    E2E_BASE_URL=\${E2E_BASE_URL}
+RUN npm i -g pnpm@10.9.0
+COPY .npmrc pnpm-lock.yml .
+RUN pnpm fetch
+COPY . .
+RUN pnpm install --frozen-lockfile --offline
+
+# ...`,
+      language: 'bash',
+    },
+    notes: ['also useful for vitest headless browser mode'],
+  },
 
   {
     template: 'Centred',
@@ -385,6 +489,7 @@ export default defineConfig({
       'https://testing-library.com/docs/svelte-testing-library',
       'https://svelte.dev/docs/svelte/testing',
       'https://github.com/dominikg/svelte-summit-testing',
+      'https://github.com/dominikg/svelte-summit-2025-talk',
     ],
   },
   {
@@ -395,6 +500,7 @@ export default defineConfig({
   {
     template: 'Centred',
     h1: 'get in touch',
+    h2: 'available for consulting',
     text: [
       'https://goepel.it',
       'https://elk.zone/m.webtoo.ls/@dominikg',
@@ -403,5 +509,6 @@ export default defineConfig({
     ],
     notes: ['for hire'],
   },
+  // todo: QA ?
   { template: 'End' },
 ] satisfies Slide[]
