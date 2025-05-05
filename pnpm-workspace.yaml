@@ -1,0 +1,5 @@
+ignoredBuiltDependencies:
+  - workerd
+onlyBuiltDependencies:
+  - '@sveltejs/kit'
+  - esbuild
