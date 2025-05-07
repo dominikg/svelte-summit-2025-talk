@@ -20,17 +20,24 @@ export default [
   },
   {
     h1: 'Testing, 1 2 3 4',
-    notes: [],
+    notes: [
+      'Who writes tests?',
+      'Who likes writing tests?'
+    ],
+
   },
   {
     template: 'Centred',
     h1: 'coming up',
     text: ['setup', 'unit', 'component', 'end to end'],
-    notes: [],
+    notes: [
+      'speedrun',
+      'little bit of everything'
+    ],
   },
   {
     image: VitestSvelte,
-    notes: ['started in 2021', 'exceptional growth', 'top of the surveys'],
+    notes: ['Vitest','started in 2021', 'exceptional growth', 'top of the surveys','Zero config'],
   },
   {
     h1: 'setup vitest with `sv` cli',
@@ -46,7 +53,11 @@ export default [
 `,
       language: 'bash',
     },
-    notes: ['sv is great', 'tested in vitest-ecosystem-ci'],
+    notes: [
+      'sv is great',
+      'Manuel is here!',
+      'tested in vitest-ecosystem-ci'
+    ],
   },
   {
     h1: 'vitest config',
@@ -67,7 +78,10 @@ export default [
   }`,
       language: 'ts',
     },
-    notes: ['workspace feature'],
+    notes: [
+      'workspace feature',
+      'projects'
+    ],
   },
   {
     h1: 'vitest config',
@@ -85,7 +99,10 @@ export default [
       }`,
       language: 'ts',
     },
-    notes: ['runs in node environment', 'excludes .svelte. files!'],
+    notes: [
+      'runs in node environment',
+      'excludes .svelte. files!',
+    ],
   },
   {
     h1: 'vitest config',
@@ -126,6 +143,7 @@ Object.defineProperty(window, 'matchMedia', {
 });`,
       language: 'ts',
     },
+    notes: ['you can add more mocks','multiple setup files'],
   },
   {
     h1: 'run unit tests',
@@ -143,7 +161,7 @@ Object.defineProperty(window, 'matchMedia', {
        press h to show help, press q to quit`,
       language: 'bash',
     },
-    notes: ['project prefix', 'watch mode demo'],
+    notes: ['project prefix','rerun on changes!', 'watch mode demo'],
   },
   {
     h1: 'testing runes in svelte modules',
@@ -161,7 +179,7 @@ export class Doubler {
 }`,
       language: 'ts',
     },
-    notes: ['$derived in a class'],
+    notes: ['$derived in a class','just an example'],
   },
   {
     h1: 'with runes in test modules!',
@@ -179,7 +197,7 @@ describe('doubler.svelte.ts', () => {
 });`,
       language: 'ts',
     },
-    notes: ['infix notation', 'rune use in test code', 'reactivity!'],
+    notes: ['infix notation inspired by request from community', 'rune use in test code', 'reactivity!'],
   },
 
   {
@@ -210,7 +228,7 @@ describe('Greeter.svelte', () => {
 });`,
       language: 'ts',
     },
-    notes: ['render uses svelte mount'],
+    notes: ['render is a util around svelte mount'],
   },
   {
     h1: 'runes work in component tests too',
@@ -228,7 +246,7 @@ describe('Greeter.svelte', () => {
   });`,
       language: 'ts',
     },
-    notes: ['render uses svelte mount'],
+    notes: ['needs flushSync to propagate'],
   },
   {
     h1: 'and you can also test SSR output',
@@ -442,7 +460,7 @@ test.describe('/api/data.json',()=>{
     h1: 'remote testing',
     code: {
       source: ` // playwright.config.ts
-const E2E_BASE_URL = process.env.TEST_BASE_URL;
+const E2E_BASE_URL = process.env.E2E_BASE_URL;
 const localConfig: PlaywrightTestConfig = {
   webServer: [{
       command: 'npm run build && node build/index.js',
