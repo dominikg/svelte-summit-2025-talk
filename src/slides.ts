@@ -497,7 +497,11 @@ RUN pnpm install --frozen-lockfile --offline
     },
     notes: ['also useful for vitest headless browser mode'],
   },
-
+  {
+    template: 'Centred',
+    h1: 'Thank You',
+    text: ['Matias', 'Vladimir', 'Jeppe', 'James', 'All of you!'],
+  },
   {
     template: 'Centred',
     h1: 'Resources',
@@ -509,11 +513,6 @@ RUN pnpm install --frozen-lockfile --offline
       'https://github.com/dominikg/svelte-summit-testing',
       'https://github.com/dominikg/svelte-summit-2025-talk',
     ],
-  },
-  {
-    template: 'Centred',
-    h1: 'Thank You',
-    text: ['Matias', 'Vladimir', 'Jeppe', 'James', 'All of you!'],
   },
   {
     template: 'Centred',
